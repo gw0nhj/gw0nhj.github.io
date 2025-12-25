@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ko" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenov | Technology & Design</title>
+    <style>
+        /* --- CSS Variables & Reset --- */
+        :root {
+            --bg-color: #f4f4f4; 
+            --text-color: #111111;
+            --accent-color: #444444;
+            --card-bg: #e0e0e0;
+            --border-color: #cccccc;
+            --transition-speed: 0.3s;
+            --btn-bg: #111111;
+            --btn-text: #ffffff;
+            --yt-scenov-bg: #111;
+            --yt-yoon-bg: #333;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #cccccc;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --btn-bg: #ffffff;
+            --btn-text: #121212;
+            --yt-scenov-bg: #000;
+            --yt-yoon-bg: #222;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
+        a:hover { opacity: 0.7; }
+        ul { list-style: none; }
+
+        /* --- Header & Nav --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--bg-color);
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color var(--transition-speed);
+        }
+
+        .nav-logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
+
+        nav ul { display: flex; gap: 30px; }
+        nav a { 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            transition: transform 0.2s ease, opacity 0.3s;
+            display: inline-block;
+        }
+        nav a:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: 1px solid var(--text-color);
+            padding: 6px 14px;
+            color: var(--text-color);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-radius: 30px;
+            transition: all 0.3s;
+            margin-left: 20px;
+        }
+        .theme-toggle:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-logo-img {
+            height: 30rem; 
+            width: auto;
+            margin-bottom: 1.5px;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
+        }
+        
+        .hero-logo-img.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        [data-theme="light"] .hero-logo-img {
+            filter: invert(1);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out 0.3s;
+        }
+        
+        .hero h1.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out 0.6s;
+        }
+        
+        .hero p.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- Sections Common --- */
+        section { padding: 100px 5%; }
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            border-left: 5px solid var(--text-color);
+            padding-left: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        /* --- About Section --- */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: start;
+        }
+        .about-text p { margin-bottom: 24px; text-align: justify; }
+        
+        .about-image img {
+            width: 100%;
+            height: auto; 
+            filter: grayscale(100%); 
+            transition: filter 0.5s;
+        }
+        .about-image img:hover { filter: grayscale(0%); }
+
+        /* --- IT Business Section --- */
+        .it-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+        .app-card {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s;
+        }
+        .app-card:hover { transform: translateY(-10px); }
+        .app-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: inline-block;
+            border: 2px solid var(--text-color);
+            padding: 15px;
+            border-radius: 50%;
+        }
+        
+        .app-details-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--text-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .app-details-btn:hover {
+            background-color: transparent;
+            color: var(--text-color);
+            transform: scale(1.05);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            width: 80%;
+            max-width: 700px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: opacity 0.3s;
+        }
+        
+        .modal-close:hover {
+            opacity: 0.7;
+        }
+        
+        .modal h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--text-color);
+            padding-left: 15px;
+        }
+        
+        .modal p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .modal ul {
+            list-style: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .modal ul li {
+            margin-bottom: 10px;
+        }
+
+        /* --- Design Section --- */
+        .design-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .design-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+        .design-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+            filter: grayscale(100%);
+        }
+        .design-item:hover img { transform: scale(1.1); }
+
+        /* --- Team Section --- */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .team-card {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .team-role {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            margin-bottom: 15px;
+        }
+        
+        .team-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            border-left: 4px solid var(--text-color);
+            padding-left: 15px;
+        }
+
+        .team-photo img {
+            width: 100%;
+            height: 100%;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            object-fit: cover;
+            transition: filter 0.5s ease, transform 0.5s ease;
+        }
+        
+        .team-info {
+            margin-bottom: 20px;
+        }
+        
+        .team-info-item {
+            display: flex;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .team-info-label {
+            font-weight: 600;
+            min-width: 60px;
+            color: var(--accent-color);
+        }
+        
+        .team-bio {
+            line-height: 1.8;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        .team-bio p {
+            margin-bottom: 12px;
+        }
+
+        /* --- YouTube Section --- */
+        .youtube-section {
+            padding: 100px 5%;
+        }
+        .yt-container {
+            display: flex;
+            width: 100%;
+            height: 300px;
+            gap: 0;
+        }
+        .yt-channel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: flex 0.5s ease;
+        }
+        .yt-channel h3 { font-size: 2rem; z-index: 2; margin-bottom: 10px;}
+        .yt-channel p { z-index: 2; opacity: 0.8; }
+        
+        .yt-left { background-color: var(--yt-scenov-bg); }
+        .yt-right { background-color: var(--yt-yoon-bg); }
+
+        .yt-channel:hover { flex: 1.5; }
+        .yt-icon { font-size: 3rem; margin-bottom: 1rem; z-index: 2; }
+
+        /* --- Metrics Section --- */
+        .metrics-section {
+            padding: 60px 5%;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .metric-item h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .metric-item p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        /* --- Contact & Footer --- */
+        .contact-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 40px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 0; 
+            border: 1px solid var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .email-btn:hover {
+            background-color: transparent;
+            color: var(--text-color);
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        /* --- Mobile --- */
+        @media (max-width: 768px) {
+            .about-content { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2rem; }
+            nav ul { display: none; } 
+            .yt-container { flex-direction: column; height: 400px; }
+            .hero-logo-img { height: 15rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="nav-logo">SCENOV</div>
+        <nav>
+            <ul>
+                <li><a href="#about">About</a></li>
+                <li><a href="#it-business">IT</a></li>
+                <li><a href="#design-business">Design</a></li>
+                <li><a href="#team">Team</a></li>
+                <li><a href="#youtube-channels">YouTube</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="theme-toggle" id="theme-btn">Light Mode</button>
+    </header>
+
+    <section class="hero">
+        <img src="./Scenov_Web_Logo.png" alt="Scenov Logo" class="hero-logo-img" id="hero-logo">
+        
+        <h1 id="hero-title">소설같은 풍경, 현실이 되다</h1>
+        <p id="hero-subtitle">Technology meets Art aesthetics.</p>
+    </section>
+
+    <section id="about">
+        <h2 class="section-title">About Scenov</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>우리 회사 <strong>세노브(Scenov)</strong>는 '기술과 예술의 경계 없는 융합'을 지향합니다. 인공지능을 이용한 정보 편향성 확인 앱인 <strong>'Bias'</strong>와 딥페이크 탐지 앱인 <strong>'AntiDeep'</strong>을 개발하여, 사용자들이 디지털 홍수 속에서도 신뢰할 수 있는 정보를 판별하고 안전한 온라인 환경을 누릴 수 있도록 기술적 보호막을 제공합니다.</p>
+                
+                <p>Scenov는 단순한 IT 기업에 머물지 않습니다. 우리는 디자인 및 사진 분야에서도 독창적인 시각을 제시합니다. 일상의 평범한 순간을 소설의 한 장면처럼 포착한 감각적인 사진을 전시하고 판매하여, 사회 전반의 미적 기준을 높이고 문화적 경험을 풍요롭게 만드는 데 일조하고 있습니다.</p>
+                
+                <p>우리는 고객의 니즈를 깊이 있게 반영한 고품질 디자인 솔루션을 통해 단순한 만족을 넘어선 미적 감동을 선사합니다. 급변하는 시장 트렌드를 누구보다 빠르게 읽어내고 선도하며, 기술적 완성도와 예술적 가치를 동시에 추구하는 것이 우리의 핵심 경쟁력입니다.</p>
+                
+                <p>스타트업이라는 유연함을 무기로, 예기치 못한 상황에도 민첩하게 대처하며 지속적인 기술 개발(R&D)과 혁신을 멈추지 않을 것입니다. Scenov는 사회적 책임을 다하는 기업으로서, 투명하고 윤리적인 경영을 통해 고객과 깊은 신뢰 관계를 형성하고, 최종적으로 IT와 예술 두 분야 모두에서 대체 불가능한 존재로 자리매김할 것을 약속드립니다.</p>
+            </div>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" alt="Scenov Vision">
+            </div>
+        </div>
+    </section>
+
+    <section id="it-business">
+        <h2 class="section-title">IT Solutions</h2>
+        <div class="it-grid">
+            <div class="app-card">
+                <div class="app-icon">⚖️</div>
+                <h3 class="app-title">Bias</h3>
+                <p class="app-desc">인공지능 기반 정보 편향성 분석 솔루션. 뉴스 기사의 중립성을 AI가 판단합니다.</p>
+                <button class="app-details-btn" onclick="openModal('bias')">자세히 보기</button>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">🛡️</div>
+                <h3 class="app-title">AntiDeep</h3>
+                <p class="app-desc">실시간 딥페이크 탐지 및 보안 프로토콜. 조작된 미디어를 즉각 판별합니다.</p>
+                <button class="app-details-btn" onclick="openModal('antideep')">자세히 보기</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modals -->
+    <div id="biasModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('bias')">&times;</span>
+            <h3>⚖️ Bias</h3>
+            <p><strong>인공지능 기반 정보 편향성 분석 솔루션</strong></p>
+            <p>Bias는 뉴스 기사의 중립성을 인공지능이 자동으로 판단하여, 사용자들이 보다 균형 잡힌 정보를 소비할 수 있도록 도와주는 혁신적인 앱입니다.</p>
+            
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+                <li>실시간 뉴스 기사 편향성 분석</li>
+                <li>정치적, 사회적 편향성 탐지</li>
+                <li>다양한 관점 제공 및 비교 분석</li>
+                <li>사용자 맞춤형 중립성 기준 설정</li>
+                <li>교육적 편향성 보고서 생성</li>
+            </ul>
+            
+            <p><strong>왜 필요한가요?</strong> 올바른 정보 소비는 민주주의의 기본입니다. Bias로 정보의 미래를 변화시키세요.</p>
+        </div>
+    </div>
+
+    <div id="antideepModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('antideep')">&times;</span>
+            <h3>🛡️ AntiDeep</h3>
+            <p><strong>실시간 딥페이크 탐지 및 보안 프로토콜</strong></p>
+            <p>AntiDeep은 조작된 미디어를 즉각 판별하는 첨단 보안 솔루션입니다. 딥페이크 기술이 발전함에 따라 우리의 탐지 기술도 함께 진화합니다.</p>
+            
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+                <li>영상 및 오디오 딥페이크 실시간 탐지</li>
+                <li>AI 기반 조작 흔적 분석</li>
+                <li>블록체인 기반 원본 인증 시스템</li>
+                <li>다중 플랫폼 지원(SNS, 메신저, 웹브라우저)</li>
+                <li>사용자 친화적 신뢰도 점수 표시</li>
+            </ul>
+            
+            <p><strong>왜 필요할까요?</strong> 디지털 시대에 진실을 지키는 것은 단순한 기술이 아닌 책임입니다. AntiDeep과 함께 안전한 디지털 환경을 만들어가세요.</p>
+        </div>
+    </div>
+
+    <section id="design-business">
+        <h2 class="section-title">Design & Photography</h2>
+        <p style="margin-bottom: 40px; color: var(--accent-color);">일상의 풍경을 소설의 한 장면처럼 포착합니다.</p>
+        <div class="design-gallery">
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop" alt="Art 1">
+            </div>
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop" alt="Art 2">
+            </div>
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop" alt="Art 3">
+            </div>
+        </div>
+    </section>
+
+    <section id="team">
+        <h2 class="section-title">Our Team</h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <div class="team-role">CEO / Founder</div>
+                <h3 class="team-name">윤형준</h3>
+                <div class="team-info">
+                    <div class="team-photo">
+                        <img src="./CEO.png" alt="윤형준 대표">
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">이름:</span>
+                        <span>윤형준 (Yoon Hyung-jun)</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">직책:</span>
+                        <span>대표이사 / 크리에이터</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">전문:</span>
+                        <span>AI 솔루션, 비즈니스 전략</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">약력:</span>
+                        <span>
+                        계명대학교 사진영상미디어과 재학 (2025~)<br>
+                        토끼동 쳐먹을 준비 (2026~)
+                        </span>
+                    </div>
+                </div>
+                <div class="team-bio">
+                    <p>Scenov의 창립자이자 대표로서 기술과 예술의 융합을 통한 혁신적인 비즈니스 모델을 구축하고 있습니다.</p>
+                    <p>인공지능 기반 정보 신뢰성 검증 시스템 개발을 주도하며, 디지털 시대의 정보 투명성 확보를 위해 끊임없이 도전하고 있습니다.</p>
+                    <p>YouTube 크리에이터로도 활동하며 기술과 문화를 연결하는 콘텐츠를 제작하고 있습니다.</p>
+                </div>
+            </div>
+
+            <div class="team-card">
+                <div class="team-role"> Developer</div>
+                <h3 class="team-name">권혁준</h3>
+                <div class="team-info">
+                    <div class="team-photo">
+                        <img src="./Developer.png" alt="권혁준 개발자">
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">이름:</span>
+                        <span>권혁준 (Kwon Hyuk-jun)</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">직책:</span>
+                        <span>수석 개발자</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">전문:</span>
+                        <span>Full-stack Development, AI/ML</span>
+                    </div>
+                    <div class="team-info-item">
+                        <span class="team-info-label">약력:</span>
+                        <span>
+                        경북대학교 컴퓨터학과 재학 (2026~)<br>
+                        윤형준 조질 준비 (2026~)
+                        </span>
+                    </div>
+                </div>
+                <div class="team-bio">
+                    <p>Scenov의 기술적 핵심을 담당하는 수석 개발자로, Bias와 AntiDeep의 주요 알고리즘 설계 및 구현을 책임지고 있습니다.</p>
+                    <p>머신러닝과 딥러닝 기술을 활용한 실용적 솔루션 개발에 전문성을 가지고 있으며, 사용자 경험을 최우선으로 하는 개발 철학을 추구합니다.</p>
+                    <p>끊임없는 기술 연구와 혁신을 통해 Scenov의 기술력 향상에 기여하고 있습니다.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="youtube-channels" class="youtube-section">
+        <h2 class="section-title">Our Channels</h2>
+        <div class="yt-container">
+            <a href="https://youtube.com/@Scenov_Official" target="_blank" class="yt-channel yt-left">
+                <div class="yt-icon">🏢</div>
+                <h3>SCENOV Official</h3>
+                <p>공식 브랜드 채널</p>
+            </a>
+            
+            <a href="https://youtube.com/@YoonHyungJun" target="_blank" class="yt-channel yt-right">
+                <div class="yt-icon">🧑‍💻</div>
+                <h3>윤형준</h3>
+                <p>CEO / Creator</p>
+            </a>
+        </div>
+    </section>
+
+    <div class="metrics-section">
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <h3>150+</h3>
+                <p>Projects Completed</p>
+            </div>
+            <div class="metric-item">
+                <h3>98%</h3>
+                <p>Client Satisfaction</p>
+            </div>
+            <div class="metric-item">
+                <h3>24/7</h3>
+                <p>Support System</p>
+            </div>
+            <div class="metric-item">
+                <h3>10k+</h3>
+                <p>App Downloads</p>
+            </div>
+        </div>
+    </div>
+
+    <footer id="contact">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">Contact Us</h2>
+        <div class="contact-container">
+            <p>프로젝트 의뢰 및 협업 문의는 아래 버튼을 이용해주세요.</p>
+            <a href="mailto:tokibusin001@gmail.com" class="email-btn">이메일 보내기</a>
+        </div>
+
+        <div style="margin-top: 50px; font-size: 0.9rem;">
+            <p>Gyeongsan-si, Gyeongsangbuk-do, South Korea</p>
+            <p>CEO: Hyung-jun Yoon</p>
+        </div>
+        <br>
+        <p>&copy; 2025 Scenov Inc. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // 테마 토글 로직
+        const toggleBtn = document.getElementById('theme-btn');
+        const htmlElement = document.documentElement;
+
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            toggleBtn.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+        });
+
+        // 페이지 로딩 시 히어로 요소 애니메이션
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('hero-logo').classList.add('animate');
+                document.getElementById('hero-title').classList.add('animate');
+                document.getElementById('hero-subtitle').classList.add('animate');
+            }, 100);
+        });
+
+        // 스크롤 애니메이션
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.app-card, .about-text, .about-image, .design-item, .metric-item, .team-card').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(20px)";
+            el.style.transition = "all 0.6s ease-out";
+            observer.observe(el);
+        });
+
+        // 모달 열기/닫기 기능
+        function openModal(app) {
+            const modalId = app === 'bias' ? 'biasModal' : 'antideepModal';
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(app) {
+            const modalId = app === 'bias' ? 'biasModal' : 'antideepModal';
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+    </script>
+</body>
+</html>
