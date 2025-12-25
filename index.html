@@ -37,7 +37,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color var(--transition-speed), color var(--transition-speed);
-            line-height: 1.7; /* 줄간격 약간 넓힘 */
+            line-height: 1.7;
             overflow-x: hidden;
         }
 
@@ -63,7 +63,18 @@
         .nav-logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
 
         nav ul { display: flex; gap: 30px; }
-        nav a { font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+        nav a { 
+            font-weight: 500; 
+            font-size: 0.9rem; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            transition: transform 0.2s ease, opacity 0.3s;
+            display: inline-block;
+        }
+        nav a:hover {
+            transform: scale(1.1);
+            opacity: 1;
+        }
 
         .theme-toggle {
             cursor: pointer;
@@ -93,31 +104,52 @@
             padding: 0 20px;
         }
 
-        /* 요청하신 CSS 적용 */
         .hero-logo-img {
-            /* 로고 크기 설정 */
             height: 30rem; 
             width: auto;
             margin-bottom: 1.5px;
-            /* 다크모드 반전 처리를 위한 필터 (필요시) */
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease-out;
         }
         
-        [data-theme="dark"] .hero-logo-img {
+        .hero-logo-img.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        [data-theme="light"] .hero-logo-img {
             filter: invert(1);
         }
 
         .hero h1 {
             font-size: 3rem;
             font-weight: 300;
-            margin-top: 20px; /* 로고와 간격 */
+            margin-top: 20px;
             margin-bottom: 20px;
             letter-spacing: -1px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out 0.3s;
+        }
+        
+        .hero h1.animate {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .hero p {
             font-size: 1.1rem;
             color: var(--accent-color);
             max-width: 600px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.8s ease-out 0.6s;
+        }
+        
+        .hero p.animate {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         /* --- Sections Common --- */
@@ -136,7 +168,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
-            align-items: start; /* 텍스트 많아짐에 따라 상단 정렬 */
+            align-items: start;
         }
         .about-text p { margin-bottom: 24px; text-align: justify; }
         
@@ -169,6 +201,84 @@
             padding: 15px;
             border-radius: 50%;
         }
+        
+        .app-details-btn {
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: 1px solid var(--text-color);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+        }
+        
+        .app-details-btn:hover {
+            background-color: transparent;
+            color: var(--text-color);
+            transform: scale(1.05);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: 5% auto;
+            padding: 40px;
+            border: 1px solid var(--border-color);
+            width: 80%;
+            max-width: 700px;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--text-color);
+            transition: opacity 0.3s;
+        }
+        
+        .modal-close:hover {
+            opacity: 0.7;
+        }
+        
+        .modal h3 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--text-color);
+            padding-left: 15px;
+        }
+        
+        .modal p {
+            margin-bottom: 15px;
+            line-height: 1.8;
+        }
+        
+        .modal ul {
+            list-style: disc;
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .modal ul li {
+            margin-bottom: 10px;
+        }
 
         /* --- Design Section --- */
         .design-gallery {
@@ -191,15 +301,15 @@
         }
         .design-item:hover img { transform: scale(1.1); }
 
-        /* --- YouTube Section (New) --- */
+        /* --- YouTube Section --- */
         .youtube-section {
             padding: 100px 5%;
         }
         .yt-container {
             display: flex;
             width: 100%;
-            height: 300px; /* 버튼 높이 */
-            gap: 0; /* 딱 붙이기 */
+            height: 300px;
+            gap: 0;
         }
         .yt-channel {
             flex: 1;
@@ -218,11 +328,10 @@
         .yt-left { background-color: var(--yt-scenov-bg); }
         .yt-right { background-color: var(--yt-yoon-bg); }
 
-        /* Hover Effect for YouTube */
-        .yt-channel:hover { flex: 1.5; } /* 호버시 영역 넓어짐 */
+        .yt-channel:hover { flex: 1.5; }
         .yt-icon { font-size: 3rem; margin-bottom: 1rem; z-index: 2; }
 
-        /* --- Metrics Section (New) --- */
+        /* --- Metrics Section --- */
         .metrics-section {
             padding: 60px 5%;
             border-top: 1px solid var(--border-color);
@@ -285,7 +394,7 @@
             .hero h1 { font-size: 2rem; }
             nav ul { display: none; } 
             .yt-container { flex-direction: column; height: 400px; }
-            .hero-logo-img { height: 15rem; /* 모바일에서는 로고 크기 조정 필요 */ }
+            .hero-logo-img { height: 15rem; }
         }
     </style>
 </head>
@@ -298,17 +407,18 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#it-business">IT</a></li>
                 <li><a href="#design-business">Design</a></li>
-                <li><a href="#youtube-channels">YouTube</a></li> <li><a href="#contact">Contact</a></li>
+                <li><a href="#youtube-channels">YouTube</a></li>
+                <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
         <button class="theme-toggle" id="theme-btn">Light Mode</button>
     </header>
 
     <section class="hero">
-        <img src="./Dark_logo.png" alt="Scenov Logo" class="hero-logo-img">
+        <img src="./Dark_logo.png" alt="Scenov Logo" class="hero-logo-img" id="hero-logo">
         
-        <h1>소설같은 풍경, 현실이 되다</h1>
-        <p>Technology meets Art aesthetics.</p>
+        <h1 id="hero-title">소설같은 풍경, 현실이 되다</h1>
+        <p id="hero-subtitle">Technology meets Art aesthetics.</p>
     </section>
 
     <section id="about">
@@ -336,21 +446,64 @@
                 <div class="app-icon">⚖️</div>
                 <h3 class="app-title">Bias</h3>
                 <p class="app-desc">인공지능 기반 정보 편향성 분석 솔루션. 뉴스 기사의 중립성을 AI가 판단합니다.</p>
+                <button class="app-details-btn" onclick="openModal('bias')">자세히 보기</button>
             </div>
             <div class="app-card">
                 <div class="app-icon">🛡️</div>
                 <h3 class="app-title">AntiDeep</h3>
                 <p class="app-desc">실시간 딥페이크 탐지 및 보안 프로토콜. 조작된 미디어를 즉각 판별합니다.</p>
+                <button class="app-details-btn" onclick="openModal('antideep')">자세히 보기</button>
             </div>
         </div>
     </section>
+
+    <!-- Modals -->
+    <div id="biasModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('bias')">&times;</span>
+            <h3>⚖️ Bias</h3>
+            <p><strong>인공지능 기반 정보 편향성 분석 솔루션</strong></p>
+            <p>Bias는 뉴스 기사의 중립성을 인공지능이 자동으로 판단하여, 사용자들이 보다 균형 잡힌 정보를 소비할 수 있도록 도와주는 혁신적인 앱입니다.</p>
+            
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+                <li>실시간 뉴스 기사 편향성 분석</li>
+                <li>정치적, 사회적 편향성 탐지</li>
+                <li>다양한 관점 제공 및 비교 분석</li>
+                <li>사용자 맞춤형 중립성 기준 설정</li>
+                <li>교육적 편향성 보고서 생성</li>
+            </ul>
+            
+            <p><strong>왜 필요한가요?</strong> 올바른 정보 소비는 민주주의의 기본입니다. Bias로 정보의 미래를 변화시키세요.</p>
+        </div>
+    </div>
+
+    <div id="antideepModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal('antideep')">&times;</span>
+            <h3>🛡️ AntiDeep</h3>
+            <p><strong>실시간 딥페이크 탐지 및 보안 프로토콜</strong></p>
+            <p>AntiDeep은 조작된 미디어를 즉각 판별하는 첨단 보안 솔루션입니다. 딥페이크 기술이 발전함에 따라 우리의 탐지 기술도 함께 진화합니다.</p>
+            
+            <p><strong>주요 기능:</strong></p>
+            <ul>
+                <li>영상 및 오디오 딥페이크 실시간 탐지</li>
+                <li>AI 기반 조작 흔적 분석</li>
+                <li>블록체인 기반 원본 인증 시스템</li>
+                <li>다중 플랫폼 지원(SNS, 메신저, 웹브라우저)</li>
+                <li>사용자 친화적 신뢰도 점수 표시</li>
+            </ul>
+            
+            <p><strong>왜 필요할까요?</strong> 디지털 시대에 진실을 지키는 것은 단순한 기술이 아닌 책임입니다. AntiDeep과 함께 안전한 디지털 환경을 만들어가세요.</p>
+        </div>
+    </div>
 
     <section id="design-business">
         <h2 class="section-title">Design & Photography</h2>
         <p style="margin-bottom: 40px; color: var(--accent-color);">일상의 풍경을 소설의 한 장면처럼 포착합니다.</p>
         <div class="design-gallery">
             <div class="design-item">
-                <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop" alt="Art 1">
+                <img src="./photo_1.png" alt="Art 1">
             </div>
             <div class="design-item">
                 <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop" alt="Art 2">
@@ -427,6 +580,15 @@
             toggleBtn.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
         });
 
+        // 페이지 로딩 시 히어로 요소 애니메이션
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('hero-logo').classList.add('animate');
+                document.getElementById('hero-title').classList.add('animate');
+                document.getElementById('hero-subtitle').classList.add('animate');
+            }, 100);
+        });
+
         // 스크롤 애니메이션
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
@@ -443,6 +605,27 @@
             el.style.transition = "all 0.6s ease-out";
             observer.observe(el);
         });
+
+        // 모달 열기/닫기 기능
+        function openModal(app) {
+            const modalId = app === 'bias' ? 'biasModal' : 'antideepModal';
+            document.getElementById(modalId).style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(app) {
+            const modalId = app === 'bias' ? 'biasModal' : 'antideepModal';
+            document.getElementById(modalId).style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
     </script>
 </body>
 </html>
