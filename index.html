@@ -1,305 +1,353 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scenov - 소설같은 풍경</title>
+    <title>Scenov | Technology & Design</title>
     <style>
-        /* --- 기본 설정 --- */
+        /* --- CSS Variables & Reset --- */
         :root {
-            --bg-color: #fcfbf9;
-            --text-color: #333333;
-            --accent-color: #666666;
-            --border-color: rgba(0,0,0,0.08);
-            --font-main: 'Noto Serif KR', serif;
-            --font-sans: 'Pretendard', sans-serif;
+            /* 라이트 모드 기본 설정 (눈부심 방지: 소프트 그레이) */
+            --bg-color: #f4f4f4; 
+            --text-color: #111111;
+            --accent-color: #444444;
+            --card-bg: #e0e0e0; /* 카드 배경도 배경보다 조금 더 진하게 */
+            --border-color: #cccccc;
+            --transition-speed: 0.3s;
+            --btn-bg: #111111;
+            --btn-text: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        [data-theme="dark"] {
+            /* 다크 모드 설정 */
+            --bg-color: #121212;
+            --text-color: #ffffff;
+            --accent-color: #cccccc;
+            --card-bg: #1e1e1e;
+            --border-color: #333333;
+            --btn-bg: #ffffff;
+            --btn-text: #121212;
+        }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: var(--font-main);
-            line-height: 1.7;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+            transition: background-color var(--transition-speed), color var(--transition-speed);
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
-        /* --- 헤더 --- */
+        a { text-decoration: none; color: inherit; transition: opacity 0.3s; }
+        a:hover { opacity: 0.7; }
+        ul { list-style: none; }
+
+        /* --- Header & Nav --- */
         header {
-            padding: 2rem 5%;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            background-color: var(--bg-color);
+            z-index: 1000;
             border-bottom: 1px solid var(--border-color);
+            transition: background-color var(--transition-speed);
         }
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            text-decoration: none;
+        .nav-logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
+
+        nav ul { display: flex; gap: 30px; }
+        nav a { font-weight: 500; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        .theme-toggle {
+            cursor: pointer;
+            background: none;
+            border: 1px solid var(--text-color);
+            padding: 6px 14px;
             color: var(--text-color);
-            letter-spacing: -0.03em;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            border-radius: 30px;
+            transition: all 0.3s;
+            margin-left: 20px;
         }
-
-        nav ul { display: flex; gap: 2rem; list-style: none; }
-        nav a {
-            text-decoration: none;
-            color: var(--accent-color);
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
-        nav a:hover { color: var(--text-color); }
-
-        /* --- 메인 공통 --- */
-        main {
-            flex: 1;
-            padding: 0 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        section { margin-bottom: 8rem; }
-        
-        h2.section-title {
-            font-size: 1.8rem;
-            font-weight: 300;
-            margin-bottom: 3rem;
-            text-align: center;
-            position: relative;
-        }
-        
-        /* 섹션 제목 밑의 작은 장식 선 */
-        h2.section-title::after {
-            content: '';
-            display: block;
-            width: 40px;
-            height: 1px;
+        .theme-toggle:hover {
             background: var(--text-color);
-            margin: 1rem auto 0;
+            color: var(--bg-color);
         }
 
-        /* --- Hero 섹션 --- */
+        /* --- Hero Section --- */
         .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             text-align: center;
-            padding: 8rem 0 4rem;
-            animation: fadeIn 1.5s ease-out;
+            padding: 0 20px;
         }
-        .hero h1 { font-size: 3rem; font-weight: 300; margin-bottom: 1.5rem; word-break: keep-all; }
-        .hero p { font-size: 1.1rem; color: var(--accent-color); }
 
-        /* --- 갤러리 --- */
-        .gallery {
+        .hero-logo-img {
+            /* 로고 크기 설정 */
+            width: 350px; 
+            max-width: 80%;
+            margin-bottom: 40px;
+            
+            /* 중요: 로고 색상 반전 처리 로직
+               만약 Dark_logo.png가 '검은색 글씨'라면 다크모드일 때 invert(1)로 흰색으로 바꿔줌.
+               만약 Dark_logo.png가 '흰색 글씨'라면 반대로 설정해야 함.
+               아래 코드는 '검은색 글씨 로고'를 가정하고 작성됨. */
+        }
+        
+        [data-theme="light"] .hero-logo-img {
+            filter: invert(1); /* 다크모드에서 로고 색상 반전 (검정->흰색) */
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--accent-color);
+            max-width: 600px;
+        }
+
+        /* --- Sections Common --- */
+        section { padding: 100px 5%; }
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            border-left: 5px solid var(--text-color);
+            padding-left: 20px;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+
+        /* --- About Section --- */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+        .about-image img {
+            width: 100%;
+            filter: grayscale(100%); 
+            transition: filter 0.5s;
+        }
+        .about-image img:hover { filter: grayscale(0%); }
+
+        /* --- IT Business Section --- */
+        .it-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem 2rem;
+            gap: 40px;
         }
-        .card { text-decoration: none; color: inherit; display: block; group: hover; }
-        .image-placeholder {
-            width: 100%; aspect-ratio: 3/4;
-            background-color: #eee; margin-bottom: 1rem;
-            transition: opacity 0.3s;
-        }
-        .card:hover .image-placeholder { opacity: 0.8; }
-        .card h3 { font-size: 1.1rem; font-weight: 500; margin-bottom: 0.5rem; }
-        .card span { font-family: var(--font-sans); font-size: 0.8rem; color: var(--accent-color); }
-
-        /* --- YouTube 섹션 (New) --- */
-        .youtube-section { margin-top: 6rem; }
-        
-        .channel-container {
-            display: flex;
-            gap: 2rem;
-            justify-content: center;
-        }
-
-        .channel-box {
-            flex: 1;
-            background: #fff;
+        .app-card {
+            background-color: var(--card-bg);
+            padding: 40px;
             border: 1px solid var(--border-color);
-            padding: 2rem;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
+            transition: transform 0.3s;
         }
-
-        .channel-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.03);
-        }
-
-        .channel-thumbnail {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background-color: #333; /* 썸네일 대신 배경색 */
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-        }
-
-        .channel-info h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .channel-info p { font-size: 0.9rem; color: var(--accent-color); font-family: var(--font-sans); }
-
-        /* --- Business Metrics (New) --- */
-        .metrics-wrapper {
-            border-top: 1px solid var(--border-color);
-            border-bottom: 1px solid var(--border-color);
-            padding: 4rem 0;
-            display: flex;
-            justify-content: space-around;
-            text-align: center;
-            margin-bottom: 4rem; /* Contact 위 여백 */
-        }
-
-        .metric-item h4 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            font-family: var(--font-main);
-        }
-
-        .metric-item p {
-            font-family: var(--font-sans);
-            font-size: 0.9rem;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* --- 푸터/Contact --- */
-        footer {
-            text-align: center;
-            padding: 4rem 2rem;
-            background-color: #f7f6f4;
-            font-family: var(--font-sans);
-            font-size: 0.85rem;
-            color: var(--accent-color);
-        }
-        
-        .contact-btn {
+        .app-card:hover { transform: translateY(-10px); }
+        .app-icon {
+            font-size: 2rem;
+            margin-bottom: 20px;
             display: inline-block;
-            margin-bottom: 2rem;
-            padding: 1rem 2rem;
+            border: 2px solid var(--text-color);
+            padding: 15px;
+            border-radius: 50%;
+        }
+
+        /* --- Design Section --- */
+        .design-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .design-item {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+        }
+        .design-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+            filter: grayscale(100%);
+        }
+        .design-item:hover img { transform: scale(1.1); }
+
+        /* --- Contact & Footer --- */
+        .contact-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .email-btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 40px;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 0; /* 모던함을 위해 각지게 */
             border: 1px solid var(--text-color);
-            text-decoration: none;
-            color: var(--text-color);
             transition: all 0.3s;
         }
-        .contact-btn:hover { background: var(--text-color); color: #fff; }
 
-        /* --- 애니메이션 & 반응형 --- */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .email-btn:hover {
+            background-color: transparent;
+            color: var(--text-color);
+            transform: scale(1.05);
         }
 
+        footer {
+            text-align: center;
+            padding: 50px 20px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--accent-color);
+        }
+
+        /* --- Mobile --- */
         @media (max-width: 768px) {
+            .about-content { grid-template-columns: 1fr; }
             .hero h1 { font-size: 2rem; }
-            header { flex-direction: column; gap: 1rem; }
-            .channel-container { flex-direction: column; }
-            .metrics-wrapper { flex-direction: column; gap: 3rem; }
+            nav ul { display: none; } /* 모바일 메뉴 생략 */
+            .nav-logo { font-size: 1.2rem; }
         }
     </style>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300;500;700&family=Pretendard:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <header>
-        <a href="#" class="logo">Scenov</a>
+        <div class="nav-logo">SCENOV</div>
         <nav>
             <ul>
-                <li><a href="#">Projects</a></li>
-                <li><a href="#">Youtube</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#it-business">IT</a></li>
+                <li><a href="#design-business">Design</a></li>
+                <li><a href="https://youtube.com/@본인채널아이디" target="_blank">YouTube</a></li> 
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
+        <button class="theme-toggle" id="theme-btn">Light Mode</button>
     </header>
 
-    <main>
-        <section class="hero">
-            <h1>소설같은 비즈니스,<br>영화같은 성과</h1>
-            <p>Scenov는 당신의 브랜드가 가진 고유한 서사를 발견합니다.</p>
-        </section>
+    <section class="hero">
+        <img src="./Dark_logo.png" alt="Scenov Logo" class="hero-logo-img">
+        
+        <h1>소설같은 풍경, 현실이 되다</h1>
+        <p>Technology meets Art aesthetics.</p>
+    </section>
 
-        <section class="gallery">
-            <a href="#" class="card">
-                <div class="image-placeholder" style="background-color: #dcdcdc;"></div>
-                <h3>Brand Film Project</h3>
-                <span>2024 — Video</span>
-            </a>
-            <a href="#" class="card">
-                <div class="image-placeholder" style="background-color: #e5e5e5;"></div>
-                <h3>Minimal Web Design</h3>
-                <span>2024 — UX/UI</span>
-            </a>
-            <a href="#" class="card">
-                <div class="image-placeholder" style="background-color: #f0f0f0;"></div>
-                <h3>Editorial Photo</h3>
-                <span>2023 — Photography</span>
-            </a>
-        </section>
-
-        <section class="youtube-section">
-            <h2 class="section-title">Youtube Channels</h2>
-            <div class="channel-container">
-                <a href="https://youtube.com/@scenov" target="_blank" class="channel-box">
-                    <div class="channel-thumbnail" style="background: #222;">
-                        <span>Scenov Official Thumb</span>
-                    </div>
-                    <div class="channel-info">
-                        <h3>Scenov Official</h3>
-                        <p>브랜드 필름 & 오피셜 영상 아카이브</p>
-                    </div>
-                </a>
-
-                <a href="https://youtube.com/@yoonhyeongjun" target="_blank" class="channel-box">
-                    <div class="channel-thumbnail" style="background: #555;">
-                        <span>Yun Hyeong-jun Thumb</span>
-                    </div>
-                    <div class="channel-info">
-                        <h3>Creator 윤형준</h3>
-                        <p>비하인드 & 크리에이터의 일상</p>
-                    </div>
-                </a>
+    <section id="about">
+        <h2 class="section-title">About Scenov</h2>
+        <div class="about-content">
+            <div class="about-text">
+                <p>우리 회사 <strong>세노브(Scenov)</strong>는, 인공지능을 이용한 정보 편향성 확인 앱인 <strong>'Bias'</strong>와 딥페이크 탐지 앱인 <strong>'AntiDeep'</strong>을 개발하였습니다. 이러한 혁신적인 기술을 통해 사용자들이 신뢰할 수 있는 정보를 제공받고, 디지털 환경에서의 안전성을 높이는 데 기여하고자 합니다.</p>
+                <br>
+                <p>또한, 감각적인 사진을 전시 및 판매하여 사회의 문화적 질을 향상시키는 데 일조할 것입니다. 우리는 고객의 니즈를 반영한 고품질의 디자인 솔루션을 제공하며, 시장의 트렌드를 선도하겠습니다.</p>
+                <br>
+                <p>스타트업으로서 유동적인 상황에 빠르게 대처하며, 지속적인 혁신을 통해 반드시 필요한 기업으로 자리매김할 것입니다. 고객과의 신뢰를 바탕으로 성장하는 기업이 되겠습니다.</p>
             </div>
-        </section>
+            <div class="about-image">
+                <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" alt="Scenov Vision">
+            </div>
+        </div>
+    </section>
 
-        <section class="metrics-wrapper">
-            <div class="metric-item">
-                <h4>12억+</h4>
-                <p>누적 매출 성과</p>
+    <section id="it-business">
+        <h2 class="section-title">IT Solutions</h2>
+        <div class="it-grid">
+            <div class="app-card">
+                <div class="app-icon">⚖️</div>
+                <h3 class="app-title">Bias</h3>
+                <p class="app-desc">인공지능 기반 정보 편향성 분석 솔루션. 뉴스 기사의 중립성을 AI가 판단합니다.</p>
             </div>
-            <div class="metric-item">
-                <h4>350+</h4>
-                <p>함께한 파트너사</p>
+            <div class="app-card">
+                <div class="app-icon">🛡️</div>
+                <h3 class="app-title">AntiDeep</h3>
+                <p class="app-desc">실시간 딥페이크 탐지 및 보안 프로토콜. 조작된 미디어를 즉각 판별합니다.</p>
             </div>
-            <div class="metric-item">
-                <h4>98%</h4>
-                <p>프로젝트 만족도</p>
-            </div>
-        </section>
+        </div>
+    </section>
 
-    </main>
+    <section id="design-business">
+        <h2 class="section-title">Design & Photography</h2>
+        <p style="margin-bottom: 40px; color: var(--accent-color);">일상의 풍경을 소설의 한 장면처럼 포착합니다.</p>
+        <div class="design-gallery">
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop" alt="Art 1">
+            </div>
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop" alt="Art 2">
+            </div>
+            <div class="design-item">
+                <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop" alt="Art 3">
+            </div>
+        </div>
+    </section>
 
     <footer id="contact">
-        <a href="mailto:hello@scenov.com" class="contact-btn">Project Inquiry</a>
-        <p>
-            경상북도 경산시 아무길 123, Scenov Building<br>
-            hello@scenov.com | +82 10-1234-5678
-        </p>
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">Contact Us</h2>
+        <div class="contact-container">
+            <p>프로젝트 의뢰 및 협업 문의는 아래 버튼을 이용해주세요.</p>
+            
+            <a href="mailto:tokibusin001@gmail.com" class="email-btn">이메일 보내기</a>
+        </div>
+
+        <div style="margin-top: 50px; font-size: 0.9rem;">
+            <p>Gyeongsan-si, Gyeongsangbuk-do, South Korea</p>
+            <p style="margin-top: 10px;">
+                <a href="https://youtube.com/@본인채널아이디" target="_blank" style="border-bottom: 1px solid var(--accent-color);">Visit our YouTube Channel</a>
+            </p>
+        </div>
         <br>
-        <p>&copy; 2024 Scenov. All rights reserved.</p>
+        <p>&copy; 2025 Scenov Inc. All rights reserved.</p>
     </footer>
 
+    <script>
+        // 테마 토글 로직
+        const toggleBtn = document.getElementById('theme-btn');
+        const htmlElement = document.documentElement;
+
+        toggleBtn.addEventListener('click', () => {
+            const currentTheme = htmlElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            htmlElement.setAttribute('data-theme', newTheme);
+            toggleBtn.textContent = newTheme === 'dark' ? 'Light Mode' : 'Dark Mode';
+        });
+
+        // 스크롤 애니메이션
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.app-card, .about-text, .about-image, .design-item').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(20px)";
+            el.style.transition = "all 0.6s ease-out";
+            observer.observe(el);
+        });
+    </script>
 </body>
 </html>
