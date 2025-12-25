@@ -7,19 +7,19 @@
     <style>
         /* --- CSS Variables & Reset --- */
         :root {
-            /* 라이트 모드 기본 설정 (눈부심 방지: 소프트 그레이) */
             --bg-color: #f4f4f4; 
             --text-color: #111111;
             --accent-color: #444444;
-            --card-bg: #e0e0e0; /* 카드 배경도 배경보다 조금 더 진하게 */
+            --card-bg: #e0e0e0;
             --border-color: #cccccc;
             --transition-speed: 0.3s;
             --btn-bg: #111111;
             --btn-text: #ffffff;
+            --yt-scenov-bg: #111;
+            --yt-yoon-bg: #333;
         }
 
         [data-theme="dark"] {
-            /* 다크 모드 설정 */
             --bg-color: #121212;
             --text-color: #ffffff;
             --accent-color: #cccccc;
@@ -27,6 +27,8 @@
             --border-color: #333333;
             --btn-bg: #ffffff;
             --btn-text: #121212;
+            --yt-scenov-bg: #000;
+            --yt-yoon-bg: #222;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
@@ -35,7 +37,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             transition: background-color var(--transition-speed), color var(--transition-speed);
-            line-height: 1.6;
+            line-height: 1.7; /* 줄간격 약간 넓힘 */
             overflow-x: hidden;
         }
 
@@ -91,25 +93,23 @@
             padding: 0 20px;
         }
 
+        /* 요청하신 CSS 적용 */
         .hero-logo-img {
             /* 로고 크기 설정 */
-            width: 350px; 
-            max-width: 80%;
-            margin-bottom: 40px;
-            
-            /* 중요: 로고 색상 반전 처리 로직
-               만약 Dark_logo.png가 '검은색 글씨'라면 다크모드일 때 invert(1)로 흰색으로 바꿔줌.
-               만약 Dark_logo.png가 '흰색 글씨'라면 반대로 설정해야 함.
-               아래 코드는 '검은색 글씨 로고'를 가정하고 작성됨. */
+            height: 30rem; 
+            width: auto;
+            margin-bottom: 1.5px;
+            /* 다크모드 반전 처리를 위한 필터 (필요시) */
         }
         
-        [data-theme="light"] .hero-logo-img {
-            filter: invert(1); /* 다크모드에서 로고 색상 반전 (검정->흰색) */
+        [data-theme="dark"] .hero-logo-img {
+            filter: invert(1);
         }
 
         .hero h1 {
             font-size: 3rem;
             font-weight: 300;
+            margin-top: 20px; /* 로고와 간격 */
             margin-bottom: 20px;
             letter-spacing: -1px;
         }
@@ -136,10 +136,13 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 60px;
-            align-items: center;
+            align-items: start; /* 텍스트 많아짐에 따라 상단 정렬 */
         }
+        .about-text p { margin-bottom: 24px; text-align: justify; }
+        
         .about-image img {
             width: 100%;
+            height: auto; 
             filter: grayscale(100%); 
             transition: filter 0.5s;
         }
@@ -188,6 +191,61 @@
         }
         .design-item:hover img { transform: scale(1.1); }
 
+        /* --- YouTube Section (New) --- */
+        .youtube-section {
+            padding: 100px 5%;
+        }
+        .yt-container {
+            display: flex;
+            width: 100%;
+            height: 300px; /* 버튼 높이 */
+            gap: 0; /* 딱 붙이기 */
+        }
+        .yt-channel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            position: relative;
+            overflow: hidden;
+            transition: flex 0.5s ease;
+        }
+        .yt-channel h3 { font-size: 2rem; z-index: 2; margin-bottom: 10px;}
+        .yt-channel p { z-index: 2; opacity: 0.8; }
+        
+        .yt-left { background-color: var(--yt-scenov-bg); }
+        .yt-right { background-color: var(--yt-yoon-bg); }
+
+        /* Hover Effect for YouTube */
+        .yt-channel:hover { flex: 1.5; } /* 호버시 영역 넓어짐 */
+        .yt-icon { font-size: 3rem; margin-bottom: 1rem; z-index: 2; }
+
+        /* --- Metrics Section (New) --- */
+        .metrics-section {
+            padding: 60px 5%;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+        .metric-item h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .metric-item p {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
         /* --- Contact & Footer --- */
         .contact-container {
             text-align: center;
@@ -202,7 +260,7 @@
             color: var(--btn-text);
             font-size: 1rem;
             font-weight: bold;
-            border-radius: 0; /* 모던함을 위해 각지게 */
+            border-radius: 0; 
             border: 1px solid var(--text-color);
             transition: all 0.3s;
         }
@@ -225,8 +283,9 @@
         @media (max-width: 768px) {
             .about-content { grid-template-columns: 1fr; }
             .hero h1 { font-size: 2rem; }
-            nav ul { display: none; } /* 모바일 메뉴 생략 */
-            .nav-logo { font-size: 1.2rem; }
+            nav ul { display: none; } 
+            .yt-container { flex-direction: column; height: 400px; }
+            .hero-logo-img { height: 15rem; /* 모바일에서는 로고 크기 조정 필요 */ }
         }
     </style>
 </head>
@@ -239,8 +298,7 @@
                 <li><a href="#about">About</a></li>
                 <li><a href="#it-business">IT</a></li>
                 <li><a href="#design-business">Design</a></li>
-                <li><a href="https://youtube.com/@본인채널아이디" target="_blank">YouTube</a></li> 
-                <li><a href="#contact">Contact</a></li>
+                <li><a href="#youtube-channels">YouTube</a></li> <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
         <button class="theme-toggle" id="theme-btn">Light Mode</button>
@@ -257,11 +315,13 @@
         <h2 class="section-title">About Scenov</h2>
         <div class="about-content">
             <div class="about-text">
-                <p>우리 회사 <strong>세노브(Scenov)</strong>는, 인공지능을 이용한 정보 편향성 확인 앱인 <strong>'Bias'</strong>와 딥페이크 탐지 앱인 <strong>'AntiDeep'</strong>을 개발하였습니다. 이러한 혁신적인 기술을 통해 사용자들이 신뢰할 수 있는 정보를 제공받고, 디지털 환경에서의 안전성을 높이는 데 기여하고자 합니다.</p>
-                <br>
-                <p>또한, 감각적인 사진을 전시 및 판매하여 사회의 문화적 질을 향상시키는 데 일조할 것입니다. 우리는 고객의 니즈를 반영한 고품질의 디자인 솔루션을 제공하며, 시장의 트렌드를 선도하겠습니다.</p>
-                <br>
-                <p>스타트업으로서 유동적인 상황에 빠르게 대처하며, 지속적인 혁신을 통해 반드시 필요한 기업으로 자리매김할 것입니다. 고객과의 신뢰를 바탕으로 성장하는 기업이 되겠습니다.</p>
+                <p>우리 회사 <strong>세노브(Scenov)</strong>는 '기술과 예술의 경계 없는 융합'을 지향합니다. 인공지능을 이용한 정보 편향성 확인 앱인 <strong>'Bias'</strong>와 딥페이크 탐지 앱인 <strong>'AntiDeep'</strong>을 개발하여, 사용자들이 디지털 홍수 속에서도 신뢰할 수 있는 정보를 판별하고 안전한 온라인 환경을 누릴 수 있도록 기술적 보호막을 제공합니다.</p>
+                
+                <p>Scenov는 단순한 IT 기업에 머물지 않습니다. 우리는 디자인 및 사진 분야에서도 독창적인 시각을 제시합니다. 일상의 평범한 순간을 소설의 한 장면처럼 포착한 감각적인 사진을 전시하고 판매하여, 사회 전반의 미적 기준을 높이고 문화적 경험을 풍요롭게 만드는 데 일조하고 있습니다.</p>
+                
+                <p>우리는 고객의 니즈를 깊이 있게 반영한 고품질 디자인 솔루션을 통해 단순한 만족을 넘어선 미적 감동을 선사합니다. 급변하는 시장 트렌드를 누구보다 빠르게 읽어내고 선도하며, 기술적 완성도와 예술적 가치를 동시에 추구하는 것이 우리의 핵심 경쟁력입니다.</p>
+                
+                <p>스타트업이라는 유연함을 무기로, 예기치 못한 상황에도 민첩하게 대처하며 지속적인 기술 개발(R&D)과 혁신을 멈추지 않을 것입니다. Scenov는 사회적 책임을 다하는 기업으로서, 투명하고 윤리적인 경영을 통해 고객과 깊은 신뢰 관계를 형성하고, 최종적으로 IT와 예술 두 분야 모두에서 대체 불가능한 존재로 자리매김할 것을 약속드립니다.</p>
             </div>
             <div class="about-image">
                 <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop" alt="Scenov Vision">
@@ -301,19 +361,54 @@
         </div>
     </section>
 
+    <section id="youtube-channels" class="youtube-section">
+        <h2 class="section-title">Our Channels</h2>
+        <div class="yt-container">
+            <a href="https://youtube.com/@Scenov_Official" target="_blank" class="yt-channel yt-left">
+                <div class="yt-icon">🏢</div>
+                <h3>SCENOV Official</h3>
+                <p>공식 브랜드 채널</p>
+            </a>
+            
+            <a href="https://youtube.com/@YoonHyungJun" target="_blank" class="yt-channel yt-right">
+                <div class="yt-icon">🧑‍💻</div>
+                <h3>윤형준</h3>
+                <p>CEO / Creator</p>
+            </a>
+        </div>
+    </section>
+
+    <div class="metrics-section">
+        <div class="metrics-grid">
+            <div class="metric-item">
+                <h3>150+</h3>
+                <p>Projects Completed</p>
+            </div>
+            <div class="metric-item">
+                <h3>98%</h3>
+                <p>Client Satisfaction</p>
+            </div>
+            <div class="metric-item">
+                <h3>24/7</h3>
+                <p>Support System</p>
+            </div>
+            <div class="metric-item">
+                <h3>10k+</h3>
+                <p>App Downloads</p>
+            </div>
+        </div>
+    </div>
+
     <footer id="contact">
         <h2 style="font-size: 2rem; margin-bottom: 20px;">Contact Us</h2>
         <div class="contact-container">
             <p>프로젝트 의뢰 및 협업 문의는 아래 버튼을 이용해주세요.</p>
-            
             <a href="mailto:tokibusin001@gmail.com" class="email-btn">이메일 보내기</a>
         </div>
 
         <div style="margin-top: 50px; font-size: 0.9rem;">
             <p>Gyeongsan-si, Gyeongsangbuk-do, South Korea</p>
-            <p style="margin-top: 10px;">
-                <a href="https://youtube.com/@본인채널아이디" target="_blank" style="border-bottom: 1px solid var(--accent-color);">Visit our YouTube Channel</a>
-            </p>
+            <p>CEO: Hyung-jun Yoon</p>
         </div>
         <br>
         <p>&copy; 2025 Scenov Inc. All rights reserved.</p>
@@ -342,7 +437,7 @@
             });
         }, { threshold: 0.1 });
 
-        document.querySelectorAll('.app-card, .about-text, .about-image, .design-item').forEach(el => {
+        document.querySelectorAll('.app-card, .about-text, .about-image, .design-item, .metric-item').forEach(el => {
             el.style.opacity = "0";
             el.style.transform = "translateY(20px)";
             el.style.transition = "all 0.6s ease-out";
