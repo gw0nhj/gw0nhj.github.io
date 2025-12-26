@@ -60,12 +60,12 @@
             transition: background-color var(--transition-speed);
         }
 
-        .nav-logo { font-weight: 900; font-size: 1.5rem; letter-spacing: -1px; }
+        .nav-logo { font-weight: 500; font-size: 1.5rem; letter-spacing: -1px; }
 
-        nav ul { display: flex; gap: 30px; }
+        nav ul {display: inline-flex; gap: 5%; margin-left: -6.5%;}
         nav a { 
             font-weight: 500; 
-            font-size: 0.9rem; 
+            font-size: 1.2rem; 
             text-transform: uppercase; 
             letter-spacing: 1px;
             transition: transform 0.2s ease, opacity 0.3s;
@@ -300,6 +300,71 @@
             filter: grayscale(100%);
         }
         .design-item:hover img { transform: scale(1.1); }
+
+        .design-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            display: flex; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s;
+            pointer-events: none; /* 이미지가 클릭되도록 */
+        }
+        
+        .design-overlay p {
+            color: #fff; font-weight: bold; text-transform: uppercase; letter-spacing: 2px;
+            border: 1px solid #fff; padding: 10px 20px;
+        }
+
+        .design-item:hover .design-overlay { opacity: 1; }
+
+        /* 모달 내부 스타일 */
+        .design-modal-content {
+            max-width: 900px; /* 사진 모달은 좀 더 넓게 */
+            padding: 0; /* 패딩 제거하여 사진을 꽉 차게 */
+            overflow: hidden; /* 둥근 모서리 유지 */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .design-modal-img-container {
+            width: 100%;
+            background-color: #000; /* 사진 배경 검정 */
+            text-align: center;
+        }
+
+        .design-modal-img-container img {
+            max-width: 100%;
+            max-height: 70vh; /* 화면 높이의 70%까지만 차지 */
+            width: auto;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            object-fit: contain; /* 사진 잘리지 않고 전체 보여주기 */
+        }
+
+        .design-modal-text {
+            padding: 30px 40px;
+            background-color: var(--card-bg);
+            text-align: left;
+        }
+
+        .design-modal-text h3 {
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+
+        .design-modal-text p {
+            color: var(--accent-color);
+            line-height: 1.6;
+        }
+
+        /* 닫기 버튼 위치 조정 */
+        .design-modal-content .modal-close {
+            top: 15px; right: 20px;
+            color: #fff; /* 사진 위일 수 있으므로 흰색 혹은 대비되는 색 */
+            text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
 
         /* --- Team Section --- */
         .team-grid {
@@ -573,19 +638,38 @@
 
     <section id="design-business">
         <h2 class="section-title">Design & Photography</h2>
-        <p style="margin-bottom: 40px; color: var(--accent-color);">일상의 풍경을 소설의 한 장면처럼 포착합니다.</p>
+        <p style="margin-bottom: 40px; color: var(--accent-color);">일상의 풍경을 소설의 한 장면처럼 포착합니다. (사진을 클릭하여 상세 보기)</p>
+        
         <div class="design-gallery">
-            <div class="design-item">
-                <img src="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?q=80&w=2070&auto=format&fit=crop" alt="Art 1">
+            <div class="design-item" onclick="openDesignModal(1)">
+                <img src="./photo_1.png" alt="Art 1">
+                <div class="design-overlay"><p>View Detail</p></div>
             </div>
-            <div class="design-item">
-                <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=2068&auto=format&fit=crop" alt="Art 2">
+            <div class="design-item" onclick="openDesignModal(2)">
+                <img src="./photo_2.png" alt="Art 2">
+                <div class="design-overlay"><p>View Detail</p></div>
             </div>
-            <div class="design-item">
-                <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=1974&auto=format&fit=crop" alt="Art 3">
+            <div class="design-item" onclick="openDesignModal(3)">
+                <img src="./photo_3.png" alt="Art 3">
+                <div class="design-overlay"><p>View Detail</p></div>
             </div>
         </div>
     </section>
+
+    <div id="designModal" class="modal">
+        <div class="modal-content design-modal-content">
+            <span class="modal-close" onclick="closeDesignModal()">&times;</span>
+            
+            <div class="design-modal-img-container">
+                <img id="design-modal-img" src="" alt="Detail Image">
+            </div>
+            
+            <div class="design-modal-text">
+                <h3 id="design-modal-title">작품 제목</h3>
+                <p id="design-modal-desc">작품 설명이 이곳에 들어갑니다.</p>
+            </div>
+        </div>
+    </div>
 
     <section id="team">
         <h2 class="section-title">Our Team</h2>
@@ -681,19 +765,19 @@
         <div class="metrics-grid">
             <div class="metric-item">
                 <h3>150+</h3>
-                <p>Projects Completed</p>
+                <p>프로젝트 개수</p>
             </div>
             <div class="metric-item">
                 <h3>98%</h3>
-                <p>Client Satisfaction</p>
+                <p>만족도</p>
             </div>
             <div class="metric-item">
                 <h3>24/7</h3>
-                <p>Support System</p>
+                <p>운영 시간</p>
             </div>
             <div class="metric-item">
                 <h3>10k+</h3>
-                <p>App Downloads</p>
+                <p>앱 다운로드</p>
             </div>
         </div>
     </div>
@@ -706,8 +790,8 @@
         </div>
 
         <div style="margin-top: 50px; font-size: 0.9rem;">
-            <p>Gyeongsan-si, Gyeongsangbuk-do, South Korea</p>
-            <p>CEO: Hyung-jun Yoon</p>
+            <p>경상북도 경산시, 부영아파트 204동</p>
+            <p>CEO: 윤형준</p>
         </div>
         <br>
         <p>&copy; 2025 Scenov Inc. All rights reserved.</p>
@@ -766,6 +850,54 @@
         }
 
         // 모달 외부 클릭 시 닫기
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        const designData = {
+            1: {
+                src: "./photo_1.png",
+                title: "Silent Horizon",
+                desc: "새벽녘의 고요한 풍경을 담았습니다. 안개 속에 가려진 산등성이는 미지의 세계에 대한 호기심을 자극하며, 차분한 색감은 보는 이로 하여금 평온함을 느끼게 합니다."
+            },
+            2: {
+                src: "./photo_2.png",
+                title: "City Noir",
+                desc: "도시의 밤은 낮보다 화려합니다. 흑백으로 처리된 이 사진은 도시의 삭막함 속에 숨겨진 구조적 아름다움을 강조하며, 빛과 그림자의 대비를 극적으로 표현했습니다."
+            },
+            3: {
+                src: "./photo_3.png",
+                title: "Modern Solitude",
+                desc: "현대 건축물의 기하학적 패턴과 그 안에 홀로 선 인물의 대비. 군중 속의 고독이라는 현대인의 초상을 미니멀한 구성으로 포착한 작품입니다."
+            }
+        };
+
+        function openDesignModal(id) {
+            const data = designData[id];
+            const modal = document.getElementById('designModal');
+            const img = document.getElementById('design-modal-img');
+            const title = document.getElementById('design-modal-title');
+            const desc = document.getElementById('design-modal-desc');
+
+            // 데이터 주입
+            img.src = data.src;
+            title.textContent = data.title;
+            desc.textContent = data.desc;
+
+            // 모달 표시
+            modal.style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+        }
+
+        function closeDesignModal() {
+            document.getElementById('designModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // 기존 window.onclick 함수 수정 (디자인 모달도 외부 클릭 시 닫히도록)
         window.onclick = function(event) {
             if (event.target.classList.contains('modal')) {
                 event.target.style.display = 'none';
