@@ -533,147 +533,221 @@
             .yt-container { flex-direction: column; height: 400px; }
             .hero-logo-img { height: 15rem; }
         }
-        /* --- Gallery Modal Styles (Vertical Layout) --- */
+
+        /* --- Gallery Modal Styles (Toggle & Close Button Update) --- */
         .gallery-content {
-            width: 90%;
-            max-width: 1000px; /* 적당한 너비 */
+            width: 95%;
+            max-width: 1600px;
             padding: 0;
             background-color: var(--bg-color);
             border: 1px solid var(--border-color);
             display: flex;
             flex-direction: column;
-            /* 높이를 고정하지 않고 내용에 따라 유동적으로 (최대 화면 90%) */
-            max-height: 90vh; 
-            overflow: hidden; /* 전체 스크롤 방지 */
+            height: 90vh;
+            overflow: hidden;
+            position: relative; /* 닫기 버튼 배치 기준 */
         }
 
         .gallery-layout {
             display: flex;
-            flex-direction: column; /* 2. 위아래 배치 */
+            flex-direction: row;
             height: 100%;
-            overflow-y: auto; /* 내용이 넘치면 스크롤 */
+            overflow: hidden;
         }
 
-        /* [상단] 메인 뷰어 영역 */
-        .gallery-main {
-            width: 100%;
+        /* === [왼쪽] 메인 영역 === */
+        .gallery-left {
+            flex: 1;
             display: flex;
             flex-direction: column;
+            border-right: 1px solid var(--border-color);
+            min-width: 0;
+            transition: all 0.3s ease; /* 사이드바 접힐 때 너비 자연스럽게 변경 */
         }
 
         .gallery-screen {
+            flex: 1;
             background-color: #000;
-            height: 60vh; /* 메인 사진 높이 확보 */
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative; /* 닫기 버튼 절대 위치 기준점 */
+        }
+
+        /* 2. 개선된 닫기 버튼 스타일 */
+        .gallery-close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: #fff;
+            font-size: 2rem;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        .gallery-close-btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            color: #000;
+            transform: rotate(90deg); /* 호버 시 회전 효과 */
         }
 
         .gallery-screen img {
             max-width: 100%;
             max-height: 100%;
             object-fit: contain;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* 설명 및 네비게이션 바 */
         .gallery-info-bar {
-            padding: 30px 40px;
-            min-height: 15%;
+            height: 240px;
+            padding: 25px 35px;
             background-color: var(--card-bg);
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
+            align-items: flex-start;
+            border-top: 1px solid var(--border-color);
+            overflow-y: auto;
         }
 
-        .gallery-text { width: 80%; }
+        .gallery-text { width: 75%; }
 
-        /* 2-2. 앨범 이름 배지 스타일 */
         .album-badge {
             display: inline-block;
-            font-size: 0.8rem;
+            font-size: 0.85rem;
             color: var(--accent-color);
             border: 1px solid var(--border-color);
-            padding: 2px 8px;
-            border-radius: 12px;
-            margin-bottom: 8px;
-            text-transform: uppercase;
+            padding: 3px 10px;
+            border-radius: 15px;
+            margin-bottom: 10px;
         }
 
         .gallery-heading {
-            font-size: 2rem;
-            margin-bottom: 5px;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
             font-weight: 700;
             color: var(--text-color);
         }
-        
-        /* 앨범 커버일 때 제목 색상 강조 (JS에서 클래스 추가로 제어) */
-        .gallery-heading.cover-mode {
-            color: #ff6b6b; 
-        }
+        .gallery-heading.cover-mode { color: #ff6b6b; }
 
         .gallery-text p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--text-color);
-            line-height: 1.6; /* 줄 간격 넉넉하게 */
-            max-width: 90%; /* 너무 길게 퍼지는 것 방지 */
+            line-height: 1.6;
         }
 
-        .gallery-nav {
-            margin-top: 10px; /* 버튼 위치 살짝 조정 */
+        /* 버튼 그룹 */
+        .gallery-nav { 
+            display: flex; 
+            gap: 10px;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .nav-divider {
+            width: 1px;
+            height: 30px;
+            background-color: var(--border-color);
+            margin: 0 5px;
         }
 
         .gallery-nav button {
             background: none;
             border: 1px solid var(--text-color);
             color: var(--text-color);
-            width: 35px; height: 35px;
+            height: 45px;
+            padding: 0 15px; /* 넓이 유동적 */
             font-size: 1.2rem; cursor: pointer;
-            transition: all 0.3s; margin-left: 5px;
+            transition: all 0.3s;
+            display: flex; align-items: center; justify-content: center;
         }
         .gallery-nav button:hover {
             background-color: var(--text-color); color: var(--bg-color);
         }
 
-        /* [하단] 썸네일 그리드 영역 */
-        .gallery-bottom-bar {
+        /* === [오른쪽] 썸네일 사이드바 === */
+        .gallery-right {
+            width: auto;
+            min-width: 120px;
+            max-width: 800px; /* 펼쳐졌을 때 최대 너비 */
             background-color: var(--bg-color);
-            padding: 30px 40px;
-            /* 2-1. 내용물이 적으면 높이가 줄어들고, 많으면 늘어남 (height: auto 효과) */
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 20px;
+            scrollbar-width: thin;
+            
+            /* 1. 접었다 폈다 애니메이션 */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+        }
+
+        /* 접혔을 때 스타일 (JS에서 클래스 추가) */
+        .gallery-right.collapsed {
+            min-width: 0;
+            max-width: 0;
+            padding: 0;
+            opacity: 0;
+            border: none;
         }
 
         .thumbnail-grid {
             display: grid;
-            grid-template-columns: repeat(5, 1fr); /* 2. 한 줄에 5개 고정 */
-            gap: 15px; /* 사진 간격 넓힘 */
+            height: 100%;
+            grid-template-rows: repeat(5, 1fr); 
+            grid-auto-flow: column; 
+            grid-auto-columns: 120px;
+            gap: 15px;
         }
 
         .thumb-item {
-            aspect-ratio: 1/1; /* 정사각형 */
+            width: 100%; height: 100%;
+            aspect-ratio: 1/1;
             cursor: pointer;
             overflow: hidden;
             border: 2px solid transparent;
             opacity: 0.5;
             transition: all 0.2s;
-            position: relative;
+            border-radius: 4px;
         }
 
-        .thumb-item img {
-            width: 100%; height: 100%; object-fit: cover;
-        }
+        .thumb-item img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* 활성화된 썸네일 스타일 */
         .thumb-item:hover, .thumb-item.active {
             opacity: 1;
-            border-color: var(--text-color);
-            transform: scale(1.03); /* 2. 살짝 커지는 효과 */
+            border-color: #ff6b6b;
+            transform: scale(0.95);
         }
 
-        /* 모바일 대응 */
+        /* 모바일 반응형 */
         @media (max-width: 768px) {
-            .gallery-screen { height: 35vh; }
-            .thumbnail-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; } /* 모바일은 4개씩 */
-            .gallery-heading { font-size: 1.2rem; }
+            .gallery-layout { flex-direction: column; }
+            .gallery-left { border-right: none; }
+            .gallery-screen { height: 40vh; }
+            .gallery-info-bar { height: auto; min-height: 150px; flex-direction: column; gap: 15px; }
+            .gallery-text { width: 100%; }
+            .gallery-nav { width: 100%; justify-content: flex-end; }
+            
+            .gallery-right { width: 100%; height: auto; min-width: 0; max-width: none; overflow-x: auto; padding: 15px; }
+            .gallery-right.collapsed { height: 0; padding: 0; } /* 모바일 세로 접기 */
+            
+            .thumbnail-grid {
+                grid-template-rows: 1fr;
+                grid-auto-flow: column;
+                grid-auto-columns: 80px;
+                height: 80px;
+            }
+            
+            .gallery-close-btn { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.5rem; }
         }
     </style>
 </head>
@@ -800,29 +874,30 @@
 
     <div id="galleryModal" class="modal">
         <div class="modal-content gallery-content">
-            <span class="modal-close" onclick="closeGalleryModal()">&times;</span>
             
             <div class="gallery-layout">
-                <div class="gallery-main">
+                <div class="gallery-left">
                     <div class="gallery-screen">
+                        <button class="gallery-close-btn" onclick="closeGalleryModal()">&times;</button>
+                        
                         <img id="gallery-main-img" src="" alt="Main View">
                     </div>
                     
                     <div class="gallery-info-bar">
                         <div class="gallery-text">
                             <span id="gallery-album-name" class="album-badge">Album Name</span>
-                            
                             <h3 id="gallery-title" class="gallery-heading">Title</h3>
                             <p id="gallery-desc">Description goes here...</p>
                         </div>
                         <div class="gallery-nav">
-                            <button onclick="prevPhoto()">&#10094;</button>
+                            <button onclick="toggleSidebar()" title="목록 열기/접기" style="font-size: 1rem;">≡</button>
+                            <div class="nav-divider"></div> <button onclick="prevPhoto()">&#10094;</button>
                             <button onclick="nextPhoto()">&#10095;</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="gallery-bottom-bar">
+                <div class="gallery-right" id="gallery-sidebar">
                     <div class="thumbnail-grid" id="thumbnail-container">
                         </div>
                 </div>
@@ -1153,6 +1228,19 @@
             }
         }
         
+        function toggleSidebar() {
+            const sidebar = document.getElementById('gallery-sidebar');
+            const btn = document.querySelector('.gallery-nav button[title="목록 열기/접기"]'); // 버튼 찾기
+            
+            sidebar.classList.toggle('collapsed');
+            
+            // 버튼 텍스트 변경 (선택사항)
+            // if (sidebar.classList.contains('collapsed')) {
+            //    btn.textContent = "목록 보기";
+            // } else {
+            //    btn.textContent = "≡ 목록";
+            // }
+        }
     </script>
 </body>
 </html>
