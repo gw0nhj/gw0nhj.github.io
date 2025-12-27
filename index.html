@@ -60,25 +60,6 @@
             transition: background-color var(--transition-speed);
         }
 
-        .menu-toggle {
-            display: none; /* 기본적으로 숨김 */
-            flex-direction: column;
-            gap: 6px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 5px;
-            z-index: 2000;
-        }
-
-        .menu-toggle span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background-color: var(--text-color);
-            transition: all 0.3s ease;
-        }
-
         .nav-logo { font-weight: 500; font-size: 1.5rem; letter-spacing: -1px; }
 
         nav ul {display: inline-flex; gap: 5%; margin-left: -6.5%;}
@@ -124,7 +105,7 @@
         }
 
         .hero-logo-img {
-            height: 50%; 
+            height: 30rem; 
             width: auto;
             margin-bottom: 1.5px;
             opacity: 0;
@@ -546,63 +527,153 @@
 
         /* --- Mobile --- */
         @media (max-width: 768px) {
-            /* 모바일에서만 버튼 보이게 */
-            .menu-toggle {
-                display: flex;
-                margin-left: auto;
-                margin-right: -5px;
-            }
-
-            /* 데스크톱 nav 숨기기 및 오버레이 설정 */
-            nav {
-                position: fixed;
-                top: 0;
-                right: -100%;
-                width: 100%;
-                height: 100vh;
-                background-color: var(--bg-color);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: right 0.4s ease-in-out;
-                z-index: 1500;
-            }
-
-            nav.active {
-                right: 0;
-            }
-
-            /* 모바일 메뉴 리스트 초기화 (점 제거 필수) */
-            nav ul {
-                display: flex;
-                flex-direction: column;
-                gap: 40px;
-                text-align: center;
-                padding: 0 !important; /* 점 생기는 여백 강제 제거 */
-                margin: 0 !important;  /* 데스크톱 마진 제거 */
-                list-style: none !important; /* 점 강제 제거 */
-            }
-
-            nav ul li {
-                list-style: none !important; /* 각 항목 점 제거 */
-                padding: 0;
-                margin: 0;
-            }
-
-            nav a {
-                font-size: 1.5rem;
-                display: block;
-            }
-
-            /* 햄버거 버튼 애니메이션 */
-            .menu-toggle.active span:nth-child(1) { transform: translateY(9px) rotate(45deg); }
-            .menu-toggle.active span:nth-child(2) { opacity: 0; }
-            .menu-toggle.active span:nth-child(3) { transform: translateY(-9px) rotate(-45deg); }
-
-            /* 기타 모바일 레이아웃 */
             .about-content { grid-template-columns: 1fr; }
             .hero h1 { font-size: 2rem; }
+            nav ul { display: none; } 
+            .yt-container { flex-direction: column; height: 400px; }
             .hero-logo-img { height: 15rem; }
+        }
+        /* --- Gallery Modal Styles (Vertical Layout) --- */
+        .gallery-content {
+            width: 90%;
+            max-width: 1000px; /* 적당한 너비 */
+            padding: 0;
+            background-color: var(--bg-color);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            /* 높이를 고정하지 않고 내용에 따라 유동적으로 (최대 화면 90%) */
+            max-height: 90vh; 
+            overflow: hidden; /* 전체 스크롤 방지 */
+        }
+
+        .gallery-layout {
+            display: flex;
+            flex-direction: column; /* 2. 위아래 배치 */
+            height: 100%;
+            overflow-y: auto; /* 내용이 넘치면 스크롤 */
+        }
+
+        /* [상단] 메인 뷰어 영역 */
+        .gallery-main {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .gallery-screen {
+            background-color: #000;
+            height: 60vh; /* 메인 사진 높이 확보 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .gallery-screen img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        /* 설명 및 네비게이션 바 */
+        .gallery-info-bar {
+            padding: 30px 40px;
+            min-height: 15%;
+            background-color: var(--card-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .gallery-text { width: 80%; }
+
+        /* 2-2. 앨범 이름 배지 스타일 */
+        .album-badge {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: var(--accent-color);
+            border: 1px solid var(--border-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .gallery-heading {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 700;
+            color: var(--text-color);
+        }
+        
+        /* 앨범 커버일 때 제목 색상 강조 (JS에서 클래스 추가로 제어) */
+        .gallery-heading.cover-mode {
+            color: #ff6b6b; 
+        }
+
+        .gallery-text p {
+            font-size: 1.1rem;
+            color: var(--text-color);
+            line-height: 1.6; /* 줄 간격 넉넉하게 */
+            max-width: 90%; /* 너무 길게 퍼지는 것 방지 */
+        }
+
+        .gallery-nav {
+            margin-top: 10px; /* 버튼 위치 살짝 조정 */
+        }
+
+        .gallery-nav button {
+            background: none;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            width: 35px; height: 35px;
+            font-size: 1.2rem; cursor: pointer;
+            transition: all 0.3s; margin-left: 5px;
+        }
+        .gallery-nav button:hover {
+            background-color: var(--text-color); color: var(--bg-color);
+        }
+
+        /* [하단] 썸네일 그리드 영역 */
+        .gallery-bottom-bar {
+            background-color: var(--bg-color);
+            padding: 30px 40px;
+            /* 2-1. 내용물이 적으면 높이가 줄어들고, 많으면 늘어남 (height: auto 효과) */
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 2. 한 줄에 5개 고정 */
+            gap: 15px; /* 사진 간격 넓힘 */
+        }
+
+        .thumb-item {
+            aspect-ratio: 1/1; /* 정사각형 */
+            cursor: pointer;
+            overflow: hidden;
+            border: 2px solid transparent;
+            opacity: 0.5;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .thumb-item img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* 활성화된 썸네일 스타일 */
+        .thumb-item:hover, .thumb-item.active {
+            opacity: 1;
+            border-color: var(--text-color);
+            transform: scale(1.03); /* 2. 살짝 커지는 효과 */
+        }
+
+        /* 모바일 대응 */
+        @media (max-width: 768px) {
+            .gallery-screen { height: 35vh; }
+            .thumbnail-grid { grid-template-columns: repeat(4, 1fr); gap: 10px; } /* 모바일은 4개씩 */
+            .gallery-heading { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -610,14 +681,7 @@
 
     <header>
         <div class="nav-logo">SCENOV</div>
-        
-        <button class="menu-toggle" id="mobile-menu-btn">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-
-        <nav id="navbar">
+        <nav>
             <ul>
                 <li><a href="#about">About</a></li>
                 <li><a href="#it-business">IT</a></li>
@@ -734,17 +798,34 @@
         </div>
     </section>
 
-    <div id="designModal" class="modal">
-        <div class="modal-content design-modal-content">
-            <span class="modal-close" onclick="closeDesignModal()">&times;</span>
+    <div id="galleryModal" class="modal">
+        <div class="modal-content gallery-content">
+            <span class="modal-close" onclick="closeGalleryModal()">&times;</span>
             
-            <div class="design-modal-img-container">
-                <img id="design-modal-img" src="" alt="Detail Image">
-            </div>
-            
-            <div class="design-modal-text">
-                <h3 id="design-modal-title">작품 제목</h3>
-                <p id="design-modal-desc">작품 설명이 이곳에 들어갑니다.</p>
+            <div class="gallery-layout">
+                <div class="gallery-main">
+                    <div class="gallery-screen">
+                        <img id="gallery-main-img" src="" alt="Main View">
+                    </div>
+                    
+                    <div class="gallery-info-bar">
+                        <div class="gallery-text">
+                            <span id="gallery-album-name" class="album-badge">Album Name</span>
+                            
+                            <h3 id="gallery-title" class="gallery-heading">Title</h3>
+                            <p id="gallery-desc">Description goes here...</p>
+                        </div>
+                        <div class="gallery-nav">
+                            <button onclick="prevPhoto()">&#10094;</button>
+                            <button onclick="nextPhoto()">&#10095;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gallery-bottom-bar">
+                    <div class="thumbnail-grid" id="thumbnail-container">
+                        </div>
+                </div>
             </div>
         </div>
     </div>
@@ -935,79 +1016,143 @@
             }
         }
 
-        const designData = {
+        // --- Gallery Portfolio Logic ---
+
+        const galleryData = {
             1: {
-                src: "./photo_1.png",
-                title: "대비의 미학",
-                desc: "윤형준의 와꾸는 현대적인 배경과 조화를 이루며, 그의 독특한 매력을 부각시키는 요소로 작용합니다. 도시의 복잡함 속에서도 그의 표정은 고요함을 유지하며, 강렬한 시각적 임팩트를 선사합니다."
+                albumTitle: "Contrast", // 앨범 이름
+                albumDesc: "이 앨범은 빛과 그림자의 극적인 대비를 통해 도시의 이면을 표현합니다. (Cover)",
+                coverImg: "./photo_1.png", // 2-3. 앨범 표지 사진 따로 설정 가능
+                photos: [
+                    { src: "./photo_1.png", title: "Main Scene", desc: "강렬한 눈빛과 흑백의 조화." },
+                    { src: "./photo_2.png", title: "Reflection", desc: "고뇌하는 현대인의 초상." },
+                    { src: "./photo_3.png", title: "Silence", desc: "정지된 시간 속의 고요함." },
+                    // 5개 채우기 예시 (크기 확인용)
+                    { src: "https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500", title: "Daily", desc: "오후의 햇살." },
+                    { src: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500", title: "Night", desc: "도시의 야경." },
+                    // 6번째 사진 (2번째 줄 테스트용)
+                    { src: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=500", title: "Structure", desc: "건축물의 기하학." }, 
+                ]
             },
             2: {
-                src: "./photo_2.png",
-                title: "자아의 탐구",
-                desc: "이 사진은 윤형준의 개성과 내면을 탐구하는 시도로, 인물의 눈빛과 포즈가 자신만의 이야기를 전달합니다. 현대인의 복잡한 감정을 간결한 이미지로 표현하며, 관객에게 깊은 사유의 여지를 남깁니다."
+                albumTitle: "Persona",
+                albumDesc: "내면의 다양한 자아를 탐구하는 포트폴리오입니다.",
+                coverImg: "./photo_2.png",
+                photos: [
+                    { src: "./photo_2.png", title: "Mask", desc: "보여지는 얼굴." },
+                    { src: "./photo_3.png", title: "Shadow", desc: "감춰진 내면." }
+                ]
             },
             3: {
-                src: "./photo_3.png",
-                title: "시간의 정지",
-                desc: "윤형준의 와꾸는 순간을 포착한 듯한 정적인 아름다움을 지니고 있습니다. 그의 존재가 마치 시간 속에서 정지해 있는 듯한 느낌을 주며, 관객은 그와 함께하는 고요한 순간을 공유하게 됩니다."
+                albumTitle: "Solitude",
+                albumDesc: "군중 속의 고독을 미니멀하게 담아냈습니다.",
+                coverImg: "./photo_3.png",
+                photos: [
+                    { src: "./photo_3.png", title: "Alone", desc: "홀로 선 순간." }
+                ]
             }
         };
 
+        let currentAlbumId = null;
+        let currentPhotoIndex = -1; // -1: 앨범 표지, 0~: 사진 인덱스
+
         function openDesignModal(id) {
-            const data = designData[id];
-            const modal = document.getElementById('designModal');
-            const img = document.getElementById('design-modal-img');
-            const title = document.getElementById('design-modal-title');
-            const desc = document.getElementById('design-modal-desc');
-
-            // 데이터 주입
-            img.src = data.src;
-            title.textContent = data.title;
-            desc.textContent = data.desc;
-
-            // 모달 표시
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+            currentAlbumId = id;
+            currentPhotoIndex = -1; // 항상 표지부터 시작
+            renderGallery();
+            document.getElementById('galleryModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
         }
 
-        function closeDesignModal() {
-            document.getElementById('designModal').style.display = 'none';
+        function closeGalleryModal() {
+            document.getElementById('galleryModal').style.display = 'none';
             document.body.style.overflow = 'auto';
         }
 
-        // 기존 window.onclick 함수 수정 (디자인 모달도 외부 클릭 시 닫히도록)
+        function renderGallery() {
+            const data = galleryData[currentAlbumId];
+            const mainImg = document.getElementById('gallery-main-img');
+            const albumName = document.getElementById('gallery-album-name');
+            const title = document.getElementById('gallery-title');
+            const desc = document.getElementById('gallery-desc');
+            const gridContainer = document.getElementById('thumbnail-container');
+
+            // 2-2. 앨범 이름 표시 (항상 표시됨)
+            albumName.textContent = data.albumTitle;
+
+            // 1. 메인 뷰어 렌더링
+            if (currentPhotoIndex === -1) {
+                // [앨범 표지 모드]
+                mainImg.src = data.coverImg; // 2-3. 표지 이미지 사용
+                title.textContent = data.albumTitle; 
+                title.classList.add('cover-mode'); // 빨간색 강조
+                desc.textContent = data.albumDesc;
+            } else {
+                // [개별 사진 모드]
+                const photo = data.photos[currentPhotoIndex];
+                mainImg.src = photo.src;
+                title.textContent = photo.title; // 사진별 제목
+                title.classList.remove('cover-mode'); // 일반 색상
+                desc.textContent = photo.desc;
+            }
+
+            // 2. 하단 썸네일 그리드 렌더링
+            gridContainer.innerHTML = ''; 
+
+            data.photos.forEach((photo, index) => {
+                const thumb = document.createElement('div');
+                thumb.className = 'thumb-item';
+                if (index === currentPhotoIndex) thumb.classList.add('active');
+                
+                thumb.onclick = () => {
+                    currentPhotoIndex = index;
+                    renderGallery();
+                };
+
+                const img = document.createElement('img');
+                img.src = photo.src;
+                thumb.appendChild(img);
+                gridContainer.appendChild(thumb);
+            });
+        }
+
+        function prevPhoto() {
+            if (currentPhotoIndex > -1) {
+                currentPhotoIndex--;
+                renderGallery();
+            } else {
+                // 표지 상태에서 뒤로 가기 -> 맨 마지막 사진으로 (Loop)
+                const data = galleryData[currentAlbumId];
+                currentPhotoIndex = data.photos.length - 1; 
+                renderGallery();
+            }
+        }
+
+        function nextPhoto() {
+            const data = galleryData[currentAlbumId];
+            if (currentPhotoIndex < data.photos.length - 1) {
+                currentPhotoIndex++;
+                renderGallery();
+            } else {
+                // 마지막 사진에서 앞으로 가기 -> 표지로 (Loop)
+                currentPhotoIndex = -1;
+                renderGallery();
+            }
+        }
+
+        // 모달 외부 클릭 닫기
         window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
+            const modal = document.getElementById('galleryModal');
+            if (event.target === modal) {
+                closeGalleryModal();
+            }
+            // 다른 모달 처리
+            if (event.target.classList.contains('modal') && event.target.id !== 'galleryModal') {
                 event.target.style.display = 'none';
                 document.body.style.overflow = 'auto';
             }
         }
         
-        // --- Mobile Menu Logic ---
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const navbar = document.querySelector('nav');
-
-        // 1. 햄버거 버튼 클릭 시 메뉴 열기/닫기
-        menuBtn.addEventListener('click', () => {
-            navbar.classList.toggle('active'); // 메뉴 보이기/숨기기
-            menuBtn.classList.toggle('active'); // 버튼 X 모양으로 변환
-            
-            // 메뉴 열려있을 때 스크롤 방지
-            if (navbar.classList.contains('active')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = 'auto';
-            }
-        });
-
-        // 2. 메뉴 항목 클릭 시 메뉴 닫기 (이동 후 닫힘)
-        document.querySelectorAll('nav a').forEach(link => {
-            link.addEventListener('click', () => {
-                navbar.classList.remove('active');
-                menuBtn.classList.remove('active');
-                document.body.style.overflow = 'auto';
-            });
-        });
     </script>
 </body>
 </html>
